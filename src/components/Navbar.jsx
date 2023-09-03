@@ -6,7 +6,9 @@ const Navbar = () => {
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid ">
-          <h4 className="navbar-brand">RTK</h4>
+          <h4 className="navbar-brand">
+            <Link to="/">RTK</Link>
+          </h4>
 
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
