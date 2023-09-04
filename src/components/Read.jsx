@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showUser } from "../features/userDetailsSlice";
-import { Link } from "react-router-dom";
+
+import CustomModal from "./CustomModal";
 
 const Read = () => {
   const { user, loading } = useSelector((state) => state.app);
   const dispatch = useDispatch();
+
+  const [id, setId] = useState();
+  const [showPopUp, setShowPopUp] = useState(false);
+
   useEffect(() => {
     dispatch(showUser());
   }, [dispatch]);
@@ -16,6 +21,14 @@ const Read = () => {
 
   return (
     <div>
+      {showPopUp && (
+        <CustomModal
+          id={id}
+          showPopUp={showPopUp}
+          setShowPopUp={setShowPopUp}
+        />
+      )}
+
       <h2>All Data</h2>
       {user?.map((item) => (
         <div className="card w-50 mx-auto my-2" key={item.id}>
@@ -25,15 +38,14 @@ const Read = () => {
               {item.email}
             </h6>
             <p className="card-text">{item.gender}</p>
-            <Link to="/" className="card-link">
+            <button
+              className="card-link"
+              onClick={() => [setId(item.id), setShowPopUp(true)]}
+            >
               View
-            </Link>
-            <Link to="/" className="card-link">
-              Edit
-            </Link>
-            <Link to="/" className="card-link">
-              Delete
-            </Link>
+            </button>
+            <button className="card-link">Edit</button>
+            <button className="card-link">Delete</button>
           </div>
         </div>
       ))}
