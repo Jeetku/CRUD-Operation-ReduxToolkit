@@ -8,7 +8,7 @@ const Read = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(showUser());
-  }, []);
+  }, [dispatch]);
 
   if (loading) {
     return <h2>Loading...</h2>;
