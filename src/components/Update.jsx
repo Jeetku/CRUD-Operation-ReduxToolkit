@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateUser } from "../features/userDetailsSlice";
 
 const Update = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [updateData, setUpdateData] = useState();
 
@@ -16,10 +19,23 @@ const Update = () => {
     }
   }, []);
 
+  const newData = (e) => {
+    e.preventDefault();
+    setUpdateData({ ...updateData, [e.target.name]: [e.target.value] });
+  };
+
+  console.log(updateData);
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(updateUser(updateData));
+    navigate("/read");
+  };
+
   return (
     <div>
       <h2 className="my-2">Fill the data</h2>
-      <form className="w-50 mx-auto my-5">
+      <form className="w-50 mx-auto my-5" onSubmit={handleUpdate}>
         <div className="mb-3">
           <label className="form-label">Name</label>
           <input
@@ -28,6 +44,7 @@ const Update = () => {
             className="form-control"
             required
             value={updateData && updateData.name}
+            onChange={newData}
           />
         </div>
         <div className="mb-3">
@@ -38,6 +55,7 @@ const Update = () => {
             className="form-control"
             required
             value={updateData && updateData.email}
+            onChange={newData}
           />
         </div>
         <div className="mb-3 w-25 mx-auto">
@@ -48,6 +66,7 @@ const Update = () => {
             className="form-control"
             required
             value={updateData && updateData.age}
+            onChange={newData}
           />
         </div>
         <div className="mb-3">
@@ -57,6 +76,7 @@ const Update = () => {
             value="Male"
             type="radio"
             checked={updateData && updateData.gender === "Male"}
+            onChange={newData}
           />
           <label className="form-check-label">Male</label>
         </div>
@@ -67,6 +87,7 @@ const Update = () => {
             name="gender"
             value="Female"
             type="radio"
+            onChange={newData}
           />
           <label className="form-check-label">Female</label>
         </div>
