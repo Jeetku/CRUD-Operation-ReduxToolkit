@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { showUser } from "../features/userDetailsSlice";
+import { deleteUser, showUser } from "../features/userDetailsSlice";
+import { Link } from "react-router-dom";
 
 import CustomModal from "./CustomModal";
 
@@ -45,7 +46,12 @@ const Read = () => {
               View
             </button>
             <button className="card-link">Edit</button>
-            <button className="card-link">Delete</button>
+            <Link
+              onClick={() => dispatch(deleteUser(item.id))}
+              className="card-link"
+            >
+              Delete
+            </Link>
           </div>
         </div>
       ))}
