@@ -24,7 +24,7 @@ const Read = () => {
             <h6 className="card-subtitle mb-2 text-body-secondary">
               {item.email}
             </h6>
-            <p className="card-text">{item.age}</p>
+            <p className="card-text">{item.gender}</p>
             <Link to="/" className="card-link">
               View
             </Link>
