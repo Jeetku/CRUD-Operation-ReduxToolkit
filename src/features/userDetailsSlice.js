@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Create Actions
-
+//create action
 export const createUser = createAsyncThunk(
   "createUser",
   async (data, { rejectWithValue }) => {
+    console.log("data", data);
     const response = await fetch(
-      "https://64f46ed8932537f4051a5ada.mockapi.io/crud",
+      "https://641dd63d945125fff3d75742.mockapi.io/crud",
       {
         method: "POST",
         headers: {
@@ -15,6 +15,7 @@ export const createUser = createAsyncThunk(
         body: JSON.stringify(data),
       }
     );
+
     try {
       const result = await response.json();
       return result;
@@ -24,31 +25,29 @@ export const createUser = createAsyncThunk(
   }
 );
 
-// Read action
-
+//read action
 export const showUser = createAsyncThunk(
   "showUser",
   async (args, { rejectWithValue }) => {
     const response = await fetch(
-      "https://64f46ed8932537f4051a5ada.mockapi.io/crud"
+      "https://641dd63d945125fff3d75742.mockapi.io/crud"
     );
 
     try {
       const result = await response.json();
+      console.log(result);
       return result;
     } catch (error) {
       return rejectWithValue(error);
     }
   }
 );
-
-// Delete Action
-
+//delete action
 export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (id, { rejectWithValue }) => {
     const response = await fetch(
-      `https://64f46ed8932537f4051a5ada.mockapi.io/crud/${id}`,
+      `https://641dd63d945125fff3d75742.mockapi.io/crud/${id}`,
       { method: "DELETE" }
     );
 
@@ -62,13 +61,13 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-// Update Action
+//update action
 export const updateUser = createAsyncThunk(
   "updateUser",
   async (data, { rejectWithValue }) => {
-    console.log("updated Data", data);
+    console.log("updated data", data);
     const response = await fetch(
-      `https://64f46ed8932537f4051a5ada.mockapi.io/crud/${data.id}`,
+      `https://641dd63d945125fff3d75742.mockapi.io/crud/${data.id}`,
       {
         method: "PUT",
         headers: {
@@ -77,6 +76,7 @@ export const updateUser = createAsyncThunk(
         body: JSON.stringify(data),
       }
     );
+
     try {
       const result = await response.json();
       return result;
@@ -86,13 +86,22 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const userDetails = createSlice({
-  name: "userDetails",
+export const userDetail = createSlice({
+  name: "userDetail",
   initialState: {
     user: [],
     loading: false,
-    error: "",
+    error: null,
+    searchData: [],
   },
+
+  reducers: {
+    searchUser: (state, action) => {
+      console.log(action.payload);
+      state.searchData = action.payload;
+    },
+  },
+
   extraReducers: {
     [createUser.pending]: (state) => {
       state.loading = true;
@@ -100,12 +109,10 @@ export const userDetails = createSlice({
     [createUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.user.push(action.payload);
-      state.error = "";
     },
     [createUser.rejected]: (state, action) => {
       state.loading = false;
-      state.user = [];
-      state.error = action.error.message;
+      state.error = action.payload.message;
     },
     [showUser.pending]: (state) => {
       state.loading = true;
@@ -113,12 +120,10 @@ export const userDetails = createSlice({
     [showUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.user = action.payload;
-      state.error = "";
     },
     [showUser.rejected]: (state, action) => {
       state.loading = false;
-      state.user = [];
-      state.error = action.error.message;
+      state.error = action.payload;
     },
 
     [deleteUser.pending]: (state) => {
@@ -128,15 +133,12 @@ export const userDetails = createSlice({
       state.loading = false;
       const { id } = action.payload;
       if (id) {
-        state.user = state.user.filter((item) => item.id !== id);
+        state.user = state.user.filter((ele) => ele.id !== id);
       }
-      // console.log("deleteUser", action.payload);
-      state.error = "";
     },
     [deleteUser.rejected]: (state, action) => {
       state.loading = false;
-      state.user = [];
-      state.error = action.error.message;
+      state.error = action.payload;
     },
 
     [updateUser.pending]: (state) => {
@@ -144,17 +146,17 @@ export const userDetails = createSlice({
     },
     [updateUser.fulfilled]: (state, action) => {
       state.loading = false;
-      state.user = state.user.map((item) =>
-        item.id === action.payload.id ? action.payload : item
+      state.user = state.user.map((ele) =>
+        ele.id === action.payload.id ? action.payload : ele
       );
-      state.error = "";
     },
     [updateUser.rejected]: (state, action) => {
       state.loading = false;
-      state.user = [];
-      state.error = action.error.message;
+      state.error = action.payload.message;
     },
   },
 });
 
-export default userDetails.reducer;
+export default userDetail.reducer;
+
+export const { searchUser } = userDetail.actions;

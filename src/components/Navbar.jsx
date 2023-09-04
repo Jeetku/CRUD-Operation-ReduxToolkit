@@ -1,17 +1,23 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { searchUser } from "../features/userDetailsSlice";
 
 const Navbar = () => {
-  const allUsers = useSelector((state) => state.app.user);
+  const allusers = useSelector((state) => state.app.user);
+  const dispatch = useDispatch();
+
+  const [searchData, setSearchData] = useState("");
+
+  useEffect(() => {
+    dispatch(searchUser(searchData));
+  }, [searchData]);
 
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid ">
-          <h4 className="navbar-brand">
-            <Link to="/">RTK</Link>
-          </h4>
+          <h4 className="navbar-brand">RTK</h4>
 
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -22,7 +28,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link to="/read" className="nav-link">
-                  All Post({allUsers.length})
+                  All Post ({allusers.length})
                 </Link>
               </li>
             </ul>
@@ -31,6 +37,8 @@ const Navbar = () => {
               type="search"
               placeholder="Search"
               aria-label="Search"
+              value={searchData}
+              onChange={(e) => setSearchData(e.target.value)}
             />
           </div>
         </div>
