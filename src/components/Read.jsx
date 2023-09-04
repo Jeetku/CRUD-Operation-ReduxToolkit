@@ -65,9 +65,7 @@ const Read = () => {
             if (searchData.length === 0) {
               return ele;
             } else {
-              console.log(
-                ele.name.toLowerCase().includes(searchData.toLowerCase())
-              );
+              return ele.name.toLowerCase().includes(searchData.toLowerCase());
             }
           })
           .filter((ele) => {
